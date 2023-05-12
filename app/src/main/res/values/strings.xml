@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DSM Proyecto API-REST</string>
+    <string name="api_user_auth">admin</string>
+    <string name="api_pass_auth">admin123</string>
+    <string name="api_alumno">http://172.190.55.220/alumno.php/</string>
+    <string name="api_profesor">http://172.190.55.220/profesor.php/</string>
+</resources>
