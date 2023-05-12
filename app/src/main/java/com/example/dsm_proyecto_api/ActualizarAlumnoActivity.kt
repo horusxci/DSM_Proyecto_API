@@ -32,6 +32,8 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
     // Obtener las credenciales de autenticación
     val auth_username = "admin"
     val auth_password = "admin123"
+    var api_url = ""
+    var tipo_registro = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,13 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
         apellidoEditText = findViewById(R.id.apellidoEditText)
         edadEditText = findViewById(R.id.edadEditText)
         actualizarButton = findViewById(R.id.actualizarButton)
+
+        // Obtención de datos que envia actividad anterior
+        val datos: Bundle? = intent.getExtras()
+        if (datos != null) {
+            api_url = datos.getString("api_url").toString()
+            tipo_registro = datos.getString("tipo_registro").toString()
+        }
 
         // Crea un cliente OkHttpClient con un interceptor que agrega las credenciales de autenticación
         val client = OkHttpClient.Builder()
@@ -54,7 +63,7 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
 
         // Crea una instancia de Retrofit con el cliente OkHttpClient
         val retrofit = Retrofit.Builder()
-            .baseUrl(resources.getString(R.string.api_alumno))
+            .baseUrl(api_url)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -100,7 +109,7 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Alumno>, response: Response<Alumno>) {
                         if (response.isSuccessful && response.body() != null) {
                             // Si la solicitud es exitosa, mostrar un mensaje de éxito en un Toast
-                            Toast.makeText(this@ActualizarAlumnoActivity, "Alumno actualizado correctamente", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActualizarAlumnoActivity, "$tipo_registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                             val i = Intent(getBaseContext(), MainActivity::class.java)
                             startActivity(i)
                         } else {
@@ -112,7 +121,7 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
                                 Toast.makeText(this@ActualizarAlumnoActivity, errorMessage, Toast.LENGTH_SHORT).show()
                             } catch (e: Exception) {
                                 // Si no se puede parsear la respuesta del servidor, mostrar un mensaje de error genérico
-                                Toast.makeText(this@ActualizarAlumnoActivity, "Error al actualizar el alumno", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@ActualizarAlumnoActivity, "Error al actualizar el $tipo_registro", Toast.LENGTH_SHORT).show()
                                 Log.e("API", "Error al parsear el JSON: ${e.message}")
                             }
                         }
@@ -121,7 +130,7 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<Alumno>, t: Throwable) {
                         // Si la solicitud falla, mostrar un mensaje de error en un Toast
                         Log.e("API", "onFailure : $t")
-                        Toast.makeText(this@ActualizarAlumnoActivity, "Error al actualizar el alumno", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ActualizarAlumnoActivity, "Error al actualizar el $tipo_registro", Toast.LENGTH_SHORT).show()
 
                         // Si la respuesta JSON está malformada, manejar el error
                         try {

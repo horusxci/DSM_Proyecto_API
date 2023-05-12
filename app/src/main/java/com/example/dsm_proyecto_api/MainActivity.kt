@@ -1,25 +1,12 @@
 package com.example.dsm_proyecto_api
 
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,13 +22,11 @@ class MainActivity : AppCompatActivity() {
         this.checkUser()
     }
 
+    //inflater del menu de la aplicacion
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        Toast.makeText(applicationContext,"Hay menu", Toast.LENGTH_SHORT).show()
-
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu,menu)
         return  true
-
     }
 
     //menu options switch case
@@ -89,13 +74,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(itent)
     }
     private fun goToAlumno(){
-        val intn = Intent(this, CRUDAlumnosActivity::class.java)
+        val intn = Intent(this, CRUDActivity::class.java)
         intn.putExtra("api_url", resources.getString(R.string.api_alumno))
-        intn.putExtra("tipo_registro", "Profesor")
+        intn.putExtra("tipo_registro", "Alumno")
         startActivity(intn)
     }
     private fun goToProfesor(){
-        val intn = Intent(this, CRUDAlumnosActivity::class.java)
+        val intn = Intent(this, CRUDActivity::class.java)
         intn.putExtra("api_url", resources.getString(R.string.api_profesor))
         intn.putExtra("tipo_registro", "Profesor")
         startActivity(intn)

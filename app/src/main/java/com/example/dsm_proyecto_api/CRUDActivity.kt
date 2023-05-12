@@ -19,12 +19,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class CRUDAlumnosActivity : AppCompatActivity() {
+class CRUDActivity : AppCompatActivity() {
 
     // variables para credenciales de autenticación
     var auth_username = ""
     var auth_password = ""
     var api_url = ""
+    var tipo_registro = ""
 
     //FB Auth obj
     private lateinit var auth: FirebaseAuth
@@ -46,6 +47,7 @@ class CRUDAlumnosActivity : AppCompatActivity() {
         val datos: Bundle? = intent.getExtras()
         if (datos != null) {
             api_url = datos.getString("api_url").toString()
+            tipo_registro = datos.getString("tipo_registro").toString()
         }
 
         //get credentials from resource file
@@ -84,6 +86,8 @@ class CRUDAlumnosActivity : AppCompatActivity() {
             val i = Intent(getBaseContext(), CrearAlumnoActivity::class.java)
             i.putExtra("auth_username", auth_username)
             i.putExtra("auth_password", auth_password)
+            i.putExtra("tipo_registro", tipo_registro)
+            i.putExtra("api_url",api_url)
             startActivity(i)
         })
     }
@@ -101,9 +105,9 @@ class CRUDAlumnosActivity : AppCompatActivity() {
                         // Establecemos el escuchador de clics en el adaptador
                         adapter.setOnItemClickListener(object : AlumnoAdapter.OnItemClickListener {
                             override fun onItemClick(alumno: Alumno) {
-                                val opciones = arrayOf("Modificar Alumno", "Eliminar Alumno")
+                                val opciones = arrayOf("Modificar $tipo_registro", "Eliminar $tipo_registro")
 
-                                AlertDialog.Builder(this@CRUDAlumnosActivity)
+                                AlertDialog.Builder(this@CRUDActivity)
                                     .setTitle(alumno.nombre)
                                     .setItems(opciones) { dialog, index ->
                                         when (index) {
@@ -120,7 +124,7 @@ class CRUDAlumnosActivity : AppCompatActivity() {
                     val error = response.errorBody()?.string()
                     Log.e("API", "Error al obtener los registros: $error")
                     Toast.makeText(
-                        this@CRUDAlumnosActivity,
+                        this@CRUDActivity,
                         "Error al obtener los registros 1",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -130,7 +134,7 @@ class CRUDAlumnosActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<Alumno>>, t: Throwable) {
                 Log.e("API", "Error al obtener los registros: ${t.message}")
                 Toast.makeText(
-                    this@CRUDAlumnosActivity,
+                    this@CRUDActivity,
                     "Error al obtener los registros 2",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -146,6 +150,9 @@ class CRUDAlumnosActivity : AppCompatActivity() {
         i.putExtra("nombre", alumno.nombre)
         i.putExtra("apellido", alumno.apellido)
         i.putExtra("edad", alumno.edad)
+        i.putExtra("tipo_registro", tipo_registro)
+        i.putExtra("api_url",api_url)
+
         // Iniciamos la actividad de actualización de alumnos
         startActivity(i)
     }
@@ -157,17 +164,17 @@ class CRUDAlumnosActivity : AppCompatActivity() {
         llamada.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@CRUDAlumnosActivity, "Alumno eliminado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@CRUDActivity, "$tipo_registro eliminado", Toast.LENGTH_SHORT).show()
                     cargarDatos(api)
                 } else {
                     val error = response.errorBody()?.string()
-                    Log.e("API", "Error al eliminar alumno : $error")
-                    Toast.makeText(this@CRUDAlumnosActivity, "Error al eliminar alumno 1", Toast.LENGTH_SHORT).show()
+                    Log.e("API", "Error al eliminar $tipo_registro : $error")
+                    Toast.makeText(this@CRUDActivity, "Error al eliminar $tipo_registro 1", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("API", "Error al eliminar alumno : $t")
-                Toast.makeText(this@CRUDAlumnosActivity, "Error al eliminar alumno 2", Toast.LENGTH_SHORT).show()
+                Log.e("API", "Error al eliminar $tipo_registro : $t")
+                Toast.makeText(this@CRUDActivity, "Error al eliminar $tipo_registro 2", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -6,9 +6,10 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/textViewTipoRegistro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar Nuevo Alumno"
+        android:text=""
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center" />
@@ -17,21 +18,21 @@
         android:id="@+id/editTextNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del alumno"
+        android:hint=""
         android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextApellido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Apellido del alumno"
+        android:hint=""
         android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextEdad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Edad del alumno"
+        android:hint=""
         android:inputType="number" />
 
     <Button
